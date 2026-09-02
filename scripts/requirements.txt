@@ -1,0 +1,10 @@
+# Dependencias para el script de evaluacion
+# La mayoria son librerias estandar de Python 3.8+
+
+# Para reportes avanzados (opcional)
+# markdown>=3.4
+# jinja2>=3.0
+
+# Para analisis de texto (opcional, mejora deteccion)
+# textblob>=0.17
+# langdetect>=1.0

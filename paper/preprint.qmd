@@ -1,0 +1,154 @@
+---
+title: "Evaluación por prompts: una alternativa a los pull requests para evaluar el proceso de aprendizaje en la era de la IA generativa"
+author:
+  - name: "Gutierrez Miranda, J. M."
+    orcid: 0000-0002-4452-7934
+    affiliations:
+      - name: "TodoEconometria"
+date: 2026-09-02
+abstract: |
+  La aparición de asistentes de programación basados en modelos de lenguaje
+  (ChatGPT, Copilot, Claude) desacopla el código entregado del aprendizaje del
+  estudiante: dos alumnos pueden entregar código idéntico habiéndolo comprendido
+  de forma muy distinta. En un curso de programación esto erosiona la validez de
+  evaluar el *producto* (el código) y hace ineficiente la revisión línea a línea
+  del *pull request*. Este trabajo propone desplazar la evaluación del producto al
+  **proceso**: en lugar de revisar código, se evalúan los *prompts* que el
+  estudiante dirigió a la IA, sus capturas de la interacción y un *blueprint*
+  técnico final. Se describe una implementación abierta —una acción de integración
+  continua que cierra automáticamente los *pull requests*, una plantilla de
+  documentación de prompts y un evaluador heurístico— desplegada en un curso de Big
+  Data con Python (230 horas, 18 estudiantes), donde la evaluación de las entregas
+  pasó de varias horas a decenas de minutos. Se discuten las limitaciones (la
+  detección de prompts fabricados es heurística y evitable; la evidencia procede de
+  un único despliegue) y las implicaciones de privacidad y consentimiento. La
+  contribución es de práctica: un método y un conjunto de herramientas
+  reproducibles, no un estudio controlado de resultados de aprendizaje.
+keywords: [evaluación auténtica, integridad académica, IA generativa, educación en programación, evaluación del proceso, pull requests]
+format:
+  html:
+    toc: true
+    number-sections: true
+    theme: cosmo
+  pdf:
+    toc: false
+    number-sections: true
+    keep-tex: false
+bibliography: references.bib
+---
+
+# Introducción {#sec-intro}
+
+Desde la difusión masiva de asistentes de programación basados en modelos de
+lenguaje a finales de 2022, evaluar código como evidencia de aprendizaje presenta
+un problema de validez. El código puede generarse a partir de una instrucción en
+lenguaje natural, de modo que el artefacto entregado ya no informa de forma fiable
+sobre lo que el estudiante comprende. Dos entregas idénticas pueden corresponder a
+dos procesos de aprendizaje opuestos: una copia sin comprensión y una construcción
+razonada.
+
+En la enseñanza de la programación esto se manifiesta en el *pull request* (PR),
+el mecanismo habitual por el que un estudiante propone su trabajo. Revisar un PR
+línea a línea busca juzgar la calidad del código; pero si el código puede ser
+generado, esa revisión mide el resultado, no el proceso, y además escala mal:
+decenas de entregas con código similar consumen muchas horas de corrección con poca
+información diagnóstica.
+
+Este trabajo propone y documenta una alternativa: **evaluar el proceso** mediante
+los *prompts* que el estudiante dirigió a la IA, en lugar del código resultante. No
+se prohíbe el uso de la IA —se asume legítima, como una herramienta profesional— y
+se traslada la evaluación a cómo se la utilizó.
+
+# Marco: del producto al proceso {#sec-marco}
+
+La idea se apoya en tres nociones establecidas de la evaluación educativa. La
+**evaluación auténtica** sostiene que las tareas deben capturar desempeños
+significativos y no solo respuestas verificables [@wiggins1990]. El desarrollo del
+**juicio evaluativo** —la capacidad del estudiante de valorar la calidad de su
+propio trabajo y el ajeno— se propone como competencia central de la educación
+superior [@tai2018]. Y la revisión de la **taxonomía de Bloom** distingue el
+recordar y aplicar de analizar, evaluar y crear [@anderson2001]: en la era de la
+IA, el nivel cognitivo relevante se desplaza hacia la formulación de buenas
+preguntas y la valoración crítica de las respuestas.
+
+La preocupación por la integridad académica ante la IA generativa está
+documentada [@cotton2024]; la propuesta de este trabajo no es de vigilancia sino de
+rediseño: si el producto ya no discrimina el aprendizaje, se evalúa el proceso que
+lo genera. La analogía profesional es directa: en el desarrollo de software, el
+valor no está solo en el código sino en las decisiones y el porqué que lo sustentan
+[@hunt2019].
+
+# El sistema {#sec-sistema}
+
+El método se articula en tres componentes, publicados como herramientas abiertas.
+
+**Documentación de prompts.** El entregable principal no es el código sino un
+archivo `PROMPTS.md` que contiene: (i) los *prompts* reales dirigidos a la IA,
+copiados tal cual —con sus errores de escritura e informalidad—; (ii) capturas de
+pantalla de las interacciones clave como evidencia; y (iii) un *blueprint* técnico
+final que la propia IA redacta a petición del estudiante, resumiendo el *stack*, la
+arquitectura y las decisiones, y que sirve para comprobar que el estudiante
+comprende lo que construyó.
+
+**Cierre de los pull requests.** Una acción de integración continua detecta la
+apertura de cualquier PR, deja un comentario que explica el sistema y lo cierra.
+El canal de aporte deja de ser el *diff* y pasa a ser la propuesta documentada.
+
+**Evaluador heurístico.** Un script recorre las entregas y genera un informe con
+indicadores objetivos —presencia y número de prompts, existencia de capturas y de
+*blueprint*, extensión del documento— y marca casos para revisión humana. La
+detección de posibles entregas fabricadas se basa en señales como la ausencia de
+errores humanos en prompts "demasiado limpios", la coincidencia con el ejemplo del
+docente o la incoherencia entre el *blueprint* y el código.
+
+# Despliegue {#sec-despliegue}
+
+El sistema se aplicó en un curso de **Big Data con Python** de 230 horas con **18
+estudiantes** universitarios. La evaluación de las 18 entregas finales, que con
+revisión de PRs requería varias horas, se realizó en el orden de media hora,
+interviniendo el docente de forma manual solo en los casos marcados por el
+evaluador. Este resultado se reporta como **experiencia de despliegue**, no como
+medida de un estudio controlado: no se compararon resultados de aprendizaje ni se
+estimó la fiabilidad de la evaluación (ver @sec-limitaciones).
+
+# Ética y privacidad {#sec-etica}
+
+El método pide a los estudiantes publicar prompts y capturas en un repositorio
+público, lo que exige cautelas. Debe obtenerse **consentimiento informado** y
+ofrecerse una alternativa privada (repositorio privado o entrega por el aula
+virtual) para quien no desee exponer su trabajo. Las capturas pueden contener datos
+personales (nombre, correo, interfaz de la cuenta), por lo que se indica a los
+estudiantes que los **oculten**. La aplicación debe cumplir la normativa de
+protección de datos de la institución (RGPD en la Unión Europea, FERPA en Estados
+Unidos) y acordar la retención y retirada de los trabajos a petición del estudiante.
+
+# Limitaciones y trabajo futuro {#sec-limitaciones}
+
+La detección de prompts fabricados es **heurística y evitable**: un estudiante puede
+pedir a la IA que introduzca erratas para simular espontaneidad. Por ello las
+alertas deben tratarse como señales para la revisión en persona, no como veredictos.
+La evidencia de eficacia procede de un **único despliegue** y no sustituye a un
+estudio con datos de aprendizaje, tasa de falsos positivos y validez de la
+evaluación. El trabajo futuro pasa por: recoger de forma sistemática las
+calificaciones y una encuesta a los estudiantes; estimar la concordancia entre
+evaluadores; y contrastar la evaluación por prompts con medidas independientes de
+comprensión.
+
+# Conclusión {#sec-conclusion}
+
+Cuando el producto deja de discriminar el aprendizaje, evaluar el proceso recupera
+la validez de la evaluación. Documentar y valorar los prompts —las preguntas que el
+estudiante sabe hacer— convierte el uso de la IA de amenaza a objeto de evaluación,
+y hace la corrección escalable. La propuesta se ofrece como método y conjunto de
+herramientas reproducibles para la comunidad educativa, a la espera de la evidencia
+empírica que un estudio controlado deberá aportar.
+
+# Disponibilidad {.unnumbered}
+
+El código y los materiales están disponibles bajo licencia MIT en
+<https://github.com/TodoEconometria/evaluacion-prompts-ia>.
+
+# Referencias {.unnumbered}
+
+::: {#refs}
+:::

@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+message: "Si usas este trabajo (el método o las herramientas), por favor cítalo como se indica."
+title: "Evaluación por PROMPTS: evaluar el proceso de aprendizaje en la era de la IA generativa"
+abstract: >-
+  Método y conjunto de herramientas abiertas para evaluar el proceso de
+  aprendizaje (los prompts que el estudiante dirige a la IA) en lugar del
+  producto (el código, que la IA puede generar) en la enseñanza de la
+  programación.
+type: software
+authors:
+  - family-names: "Gutierrez Miranda"
+    given-names: "Juan Marcelo"
+    orcid: "https://orcid.org/0000-0002-4452-7934"
+    affiliation: "TodoEconometria"
+repository-code: "https://github.com/TodoEconometria/evaluacion-prompts-ia"
+url: "https://github.com/TodoEconometria/evaluacion-prompts-ia"
+license: MIT
+version: "1.0.0"
+date-released: "2026-09-03"
+keywords:
+  - evaluación auténtica
+  - integridad académica
+  - IA generativa
+  - educación en programación
+  - evaluación del proceso
+  - ingeniería de prompts
+preferred-citation:
+  type: article
+  title: "Evaluación por prompts: desplazar la evaluación del producto al proceso en la enseñanza de la programación en la era de la IA generativa"
+  authors:
+    - family-names: "Gutierrez Miranda"
+      given-names: "Juan Marcelo"
+      orcid: "https://orcid.org/0000-0002-4452-7934"
+      affiliation: "TodoEconometria"
+  year: 2026
+  notes: "Preprint. TodoEconometria."

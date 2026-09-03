@@ -1,30 +1,37 @@
 ---
-title: "Evaluación por prompts: una alternativa a los pull requests para evaluar el proceso de aprendizaje en la era de la IA generativa"
+title: "Evaluación por prompts: desplazar la evaluación del producto al proceso en la enseñanza de la programación en la era de la IA generativa"
 author:
   - name: "Gutierrez Miranda, J. M."
     orcid: 0000-0002-4452-7934
     affiliations:
       - name: "TodoEconometria"
-date: 2026-09-02
+date: 2026-09-03
 abstract: |
-  La aparición de asistentes de programación basados en modelos de lenguaje
-  (ChatGPT, Copilot, Claude) desacopla el código entregado del aprendizaje del
+  Los asistentes de programación basados en modelos de lenguaje (ChatGPT,
+  GitHub Copilot, Claude) desacoplan el código entregado del aprendizaje del
   estudiante: dos alumnos pueden entregar código idéntico habiéndolo comprendido
-  de forma muy distinta. En un curso de programación esto erosiona la validez de
-  evaluar el *producto* (el código) y hace ineficiente la revisión línea a línea
-  del *pull request*. Este trabajo propone desplazar la evaluación del producto al
-  **proceso**: en lugar de revisar código, se evalúan los *prompts* que el
-  estudiante dirigió a la IA, sus capturas de la interacción y un *blueprint*
-  técnico final. Se describe una implementación abierta —una acción de integración
-  continua que cierra automáticamente los *pull requests*, una plantilla de
-  documentación de prompts y un evaluador heurístico— desplegada en un curso de Big
-  Data con Python (230 horas, 18 estudiantes), donde la evaluación de las entregas
-  pasó de varias horas a decenas de minutos. Se discuten las limitaciones (la
-  detección de prompts fabricados es heurística y evitable; la evidencia procede de
-  un único despliegue) y las implicaciones de privacidad y consentimiento. La
-  contribución es de práctica: un método y un conjunto de herramientas
-  reproducibles, no un estudio controlado de resultados de aprendizaje.
-keywords: [evaluación auténtica, integridad académica, IA generativa, educación en programación, evaluación del proceso, pull requests]
+  de forma opuesta. Sostengo que este desacoplamiento es un problema de *validez*
+  y no de *integridad*: cuando un generador competente puede producir el
+  artefacto a bajo coste, la información mutua entre el artefacto y la competencia
+  del estudiante tiende a cero, y evaluar el producto —revisar el código del
+  *pull request* línea a línea— pierde poder discriminante además de escalar mal.
+  La respuesta que propongo no es detectar ni prohibir la IA, sino **rediseñar el
+  objeto evaluado**: desplazar la evidencia del producto al proceso. En lugar de
+  código se evalúan los *prompts* que el estudiante dirigió a la IA, las capturas
+  de la interacción y un *blueprint* técnico final, tratados como cuatro fuentes
+  cuya **coherencia mutua** es costosa de falsificar. Enmarco la propuesta en la
+  alineación constructiva y el juicio evaluativo, y describo una implementación
+  abierta —una acción de integración continua que cierra los *pull requests*, una
+  plantilla de documentación y un evaluador heurístico concebido como
+  *clasificador de cribado* orientado a la sensibilidad— desplegada en un curso de
+  Big Data con Python de 230 horas con un grupo heterogéneo de profesionales en
+  activo (perfiles de TI, análisis de datos y big data). La corrección de las
+  entregas pasó de varias horas a decenas de minutos. Discuto con detalle las
+  amenazas a la validez, la evadibilidad de la detección automática y las
+  implicaciones de privacidad. La contribución es metodológica y de práctica —un
+  marco, un método y herramientas reproducibles—, no un estudio controlado de
+  resultados de aprendizaje.
+keywords: [evaluación auténtica, alineación constructiva, juicio evaluativo, integridad académica, IA generativa, educación en programación, evaluación del proceso, ingeniería de prompts]
 format:
   html:
     toc: true
@@ -41,112 +48,314 @@ bibliography: references.bib
 
 Desde la difusión masiva de asistentes de programación basados en modelos de
 lenguaje a finales de 2022, evaluar código como evidencia de aprendizaje presenta
-un problema de validez. El código puede generarse a partir de una instrucción en
-lenguaje natural, de modo que el artefacto entregado ya no informa de forma fiable
-sobre lo que el estudiante comprende. Dos entregas idénticas pueden corresponder a
-dos procesos de aprendizaje opuestos: una copia sin comprensión y una construcción
-razonada.
+un problema de fondo. Herramientas como GitHub Copilot o ChatGPT generan código
+funcional a partir de una instrucción en lenguaje natural y resuelven una fracción
+elevada de los ejercicios típicos de un curso introductorio [@finnieansley2022;
+@denny2023]. En consecuencia, el artefacto entregado deja de informar de forma
+fiable sobre lo que el estudiante comprende: dos entregas idénticas pueden
+corresponder a dos procesos opuestos —una copia sin comprensión y una construcción
+razonada— y la evaluación no puede distinguirlas mirando solo el resultado.
 
-En la enseñanza de la programación esto se manifiesta en el *pull request* (PR),
-el mecanismo habitual por el que un estudiante propone su trabajo. Revisar un PR
-línea a línea busca juzgar la calidad del código; pero si el código puede ser
-generado, esa revisión mide el resultado, no el proceso, y además escala mal:
-decenas de entregas con código similar consumen muchas horas de corrección con poca
-información diagnóstica.
+En la enseñanza de la programación este problema se materializa en el *pull
+request* (PR), el mecanismo por el que un estudiante propone su trabajo y el
+docente lo revisa *diff* a *diff*. Revisar un PR busca juzgar la calidad del
+código; pero si el código puede generarse, esa revisión mide el producto y no el
+proceso, y además escala mal: decenas de entregas con código similar consumen
+muchas horas de corrección con escasa información diagnóstica. La comunidad
+docente ha reaccionado a este escenario en un abanico que va de prohibir las
+herramientas a integrarlas explícitamente [@lau2023; @becker2023], sin un consenso
+sobre *qué* evaluar cuando el producto deja de discriminar.
 
-Este trabajo propone y documenta una alternativa: **evaluar el proceso** mediante
-los *prompts* que el estudiante dirigió a la IA, en lugar del código resultante. No
-se prohíbe el uso de la IA —se asume legítima, como una herramienta profesional— y
-se traslada la evaluación a cómo se la utilizó.
+Este trabajo defiende una tesis y documenta su puesta en práctica. La tesis es que
+el desacoplamiento entre código y aprendizaje es, antes que un problema de
+integridad académica, un problema de **validez de la evaluación**: el artefacto ha
+perdido poder discriminante. De ahí que la respuesta más robusta no sea vigilar
+(detectar copia) ni prohibir (vetar la IA), sino **rediseñar el objeto evaluado**
+y desplazar la evidencia del *producto* al *proceso* —los *prompts* que el
+estudiante dirigió a la IA, y las decisiones que tomó con ella—. No se prohíbe la
+IA: se asume legítima, como herramienta profesional, y se evalúa cómo se la usa.
 
-# Marco: del producto al proceso {#sec-marco}
+Las contribuciones son:
 
-La idea se apoya en tres nociones establecidas de la evaluación educativa. La
+1. Un **argumento de validez** (@sec-validez) que explica, en términos de poder
+   discriminante de la evidencia, por qué el código pierde valor evaluativo ante
+   un generador competente y por qué el proceso lo recupera.
+2. Un **método de evaluación por prompts** (@sec-metodo) que trata prompts,
+   capturas, *blueprint* y código como cuatro fuentes cuya **coherencia mutua** es
+   costosa de falsificar, con una rúbrica alineada a los niveles cognitivos
+   superiores.
+3. Un **evaluador automático concebido como clasificador de cribado**
+   (@sec-cribado), orientado a la sensibilidad (preferir falsos positivos a falsos
+   negativos) para concentrar la revisión humana, con su formulación explícita y
+   sus límites.
+4. Un **informe de despliegue** en un curso real (@sec-despliegue) y un análisis
+   franco de **amenazas a la validez** (@sec-amenazas), privacidad (@sec-etica) y
+   trabajo futuro, junto con un **conjunto de herramientas abiertas y
+   reproducibles**.
+
+# Antecedentes y trabajo relacionado {#sec-relacionado}
+
+## Evaluación auténtica, alineación y juicio evaluativo
+
+La propuesta se apoya en tres nociones consolidadas de la evaluación educativa. La
 **evaluación auténtica** sostiene que las tareas deben capturar desempeños
-significativos y no solo respuestas verificables [@wiggins1990]. El desarrollo del
-**juicio evaluativo** —la capacidad del estudiante de valorar la calidad de su
-propio trabajo y el ajeno— se propone como competencia central de la educación
-superior [@tai2018]. Y la revisión de la **taxonomía de Bloom** distingue el
-recordar y aplicar de analizar, evaluar y crear [@anderson2001]: en la era de la
-IA, el nivel cognitivo relevante se desplaza hacia la formulación de buenas
-preguntas y la valoración crítica de las respuestas.
+significativos y contextualizados, no solo respuestas verificables [@wiggins1990].
+La **alineación constructiva** exige que las actividades y los instrumentos de
+evaluación estén alineados con los resultados de aprendizaje que de verdad se
+persiguen [@biggs1996]: si el resultado buscado en la era de la IA incluye
+formular buenos problemas y juzgar críticamente las respuestas de un asistente,
+evaluar únicamente el código entregado rompe esa alineación. La **evaluación
+formativa** subraya que el estudiante debe poder comparar su desempeño con un
+estándar y cerrar la brecha [@sadler1989], y el desarrollo del **juicio
+evaluativo** —la capacidad de valorar la calidad del propio trabajo y del ajeno—
+se propone como competencia central de la educación superior [@tai2018]. La
+revisión de la **taxonomía de Bloom** [@anderson2001] ordena esta transición:
+cuando *recordar* y *aplicar* sintaxis puede delegarse en la máquina, el nivel
+cognitivo relevante se desplaza hacia *analizar*, *evaluar* y *crear*, esto es,
+hacia la formulación de preguntas y la valoración de respuestas.
 
-La preocupación por la integridad académica ante la IA generativa está
-documentada [@cotton2024]; la propuesta de este trabajo no es de vigilancia sino de
-rediseño: si el producto ya no discrimina el aprendizaje, se evalúa el proceso que
-lo genera. La analogía profesional es directa: en el desarrollo de software, el
-valor no está solo en el código sino en las decisiones y el porqué que lo sustentan
-[@hunt2019].
+## IA generativa en la educación en programación
 
-# El sistema {#sec-sistema}
+Un cuerpo creciente de literatura documenta el impacto de los generadores de
+código en la enseñanza. Los modelos resuelven con soltura los exámenes y ejercicios
+introductorios [@finnieansley2022], lo que ha llevado a revisar tanto los
+contenidos como la evaluación de los cursos iniciales [@becker2023]. Frente a ello,
+el profesorado se posiciona en un espectro que va del veto a la adopción
+deliberada, con la expectativa mayoritaria de que la resistencia es fútil y de que
+habrá que rediseñar la evaluación [@lau2023]. Este trabajo se sitúa en el extremo
+integrador de ese espectro, pero aporta lo que en esos estudios queda abierto: un
+*qué* y un *cómo* concretos para evaluar el proceso.
 
-El método se articula en tres componentes, publicados como herramientas abiertas.
+## La formulación de prompts como competencia
 
-**Documentación de prompts.** El entregable principal no es el código sino un
-archivo `PROMPTS.md` que contiene: (i) los *prompts* reales dirigidos a la IA,
-copiados tal cual —con sus errores de escritura e informalidad—; (ii) capturas de
-pantalla de las interacciones clave como evidencia; y (iii) un *blueprint* técnico
-final que la propia IA redacta a petición del estudiante, resumiendo el *stack*, la
-arquitectura y las decisiones, y que sirve para comprobar que el estudiante
-comprende lo que construyó.
+Interactuar con un asistente de forma eficaz no es trivial: exige descomponer el
+problema, expresar restricciones, iterar sobre respuestas parciales y detectar
+errores. La ingeniería de *prompts* empieza a estudiarse como una competencia con
+estructura propia —patrones reutilizables [@white2023]— y como objeto de enseñanza
+en programación introductoria [@denny2023]. Si formular buenos *prompts* es una
+habilidad que discrimina desempeños, entonces es un candidato natural a *objeto de
+evaluación*, y no solo un medio para producir el código.
 
-**Cierre de los pull requests.** Una acción de integración continua detecta la
-apertura de cualquier PR, deja un comentario que explica el sistema y lo cierra.
-El canal de aporte deja de ser el *diff* y pasa a ser la propuesta documentada.
+## Integridad y detección: por qué esto no es un detector
 
-**Evaluador heurístico.** Un script recorre las entregas y genera un informe con
-indicadores objetivos —presencia y número de prompts, existencia de capturas y de
-*blueprint*, extensión del documento— y marca casos para revisión humana. La
-detección de posibles entregas fabricadas se basa en señales como la ausencia de
-errores humanos en prompts "demasiado limpios", la coincidencia con el ejemplo del
-docente o la incoherencia entre el *blueprint* y el código.
+Ante la IA generativa, buena parte de la respuesta institucional se ha orientado a
+la integridad académica y la detección [@cotton2024]. Conviene separar dos
+linajes. La detección de plagio *entre* entregas tiene una base algorítmica sólida
+—la huella digital de documentos por *winnowing* es el fundamento de herramientas
+como MOSS [@schleimer2003]— y sigue siendo útil frente a la copia literal. Pero la
+detección de texto *generado por IA* es frágil y evadible, y su uso punitivo
+traslada al estudiante la carga de la prueba. La propuesta de este trabajo es
+deliberadamente **distinta de un detector**: no intenta decidir si hubo IA —se
+asume que la hubo—, sino rediseñar la evidencia evaluada para que el uso honesto y
+reflexivo de la IA sea, precisamente, lo que produce una buena nota. La detección
+automática que incluye (@sec-cribado) no emite veredictos: solo prioriza qué
+entregas merecen una conversación con el docente.
 
-# Despliegue {#sec-despliegue}
+# Por qué el producto pierde validez y el proceso la recupera {#sec-validez}
 
-El sistema se aplicó en un curso de **Big Data con Python** de 230 horas con **18
-estudiantes** universitarios. La evaluación de las 18 entregas finales, que con
-revisión de PRs requería varias horas, se realizó en el orden de media hora,
-interviniendo el docente de forma manual solo en los casos marcados por el
-evaluador. Este resultado se reporta como **experiencia de despliegue**, no como
-medida de un estudio controlado: no se compararon resultados de aprendizaje ni se
-estimó la fiabilidad de la evaluación (ver @sec-limitaciones).
+Conviene enunciar el argumento con precisión, porque de él se derivan tanto el
+método como sus límites. Toda evaluación infiere un constructo latente no
+observable —la competencia del estudiante, $C$— a partir de evidencia observable
+$E$. La calidad de esa inferencia depende del **poder discriminante** de $E$: de
+cuánto varía la evidencia con la competencia. En términos informales, una
+evidencia sirve en la medida en que su información mutua con la competencia,
+$I(C; E)$, es alta; una evidencia cuya distribución no cambia con $C$ no permite
+inferir nada.
+
+Antes de los generadores competentes, el código entregado, $E_{\text{cod}}$, era
+buena evidencia: producir código correcto para un problema no trivial estaba
+fuertemente condicionado por la competencia, de modo que $I(C; E_{\text{cod}})$ era
+alta. Un generador capaz cambia ese condicionamiento: el código correcto es
+alcanzable con esfuerzo y competencia bajos, porque lo aporta la máquina. La
+distribución del artefacto deja de depender apreciablemente de $C$ y
+$I(C; E_{\text{cod}}) \rightarrow 0$. No es que el estudiante "haga trampa"; es que
+el artefacto ha dejado de ser informativo. Evaluarlo con la misma rúbrica de antes
+es un error de medida, con independencia de la honestidad de nadie.
+
+La salida no es restaurar artificialmente el poder discriminante del código
+—prohibiendo la herramienta o vigilando su uso—, sino **cambiar la evidencia
+observada** por otra que siga condicionada por la competencia bajo el nuevo
+régimen. El proceso —los *prompts*, las iteraciones, las decisiones, la capacidad
+de explicar lo construido— cumple esa condición: el generador produce el código,
+pero no produce *por el estudiante* la secuencia de preguntas informadas que lleva
+a un buen resultado ni la comprensión que permite defenderlo. Sea
+$E_{\text{proc}}$ esa evidencia de proceso; la apuesta del método es que, en el
+régimen actual, $I(C; E_{\text{proc}}) \gg I(C; E_{\text{cod}})$. Esto es,
+exactamente, restaurar la **alineación constructiva** [@biggs1996]: alinear la
+evidencia evaluada con el resultado de aprendizaje que hoy importa —formular y
+juzgar—, en lugar de con un artefacto que la máquina ya provee.
+
+# El método: evaluación por prompts {#sec-metodo}
+
+## Modelo de evidencia: cuatro fuentes coherentes
+
+El entregable principal deja de ser el código y pasa a ser un archivo `PROMPTS.md`
+acompañado de material de apoyo. Se evalúan cuatro fuentes:
+
+1. **Prompts reales**, copiados tal cual —con sus erratas e informalidad—, que
+   muestran cómo el estudiante descompuso el problema e interrogó a la IA.
+2. **Capturas** de las interacciones clave, como evidencia de que los *prompts*
+   ocurrieron y en qué contexto.
+3. Un **blueprint** técnico final que la propia IA redacta a petición del
+   estudiante —*stack*, arquitectura, decisiones— y que obliga a articular lo
+   construido.
+4. El **código** resultante, ya no como objeto central de la nota sino como
+   ancla de coherencia.
+
+La fuerza del método no reside en ninguna fuente aislada —cada una es falsificable
+por separado— sino en su **coherencia mutua**. Los *prompts* deben explicar el
+código; las capturas deben corresponderse con los *prompts*; el *blueprint* debe
+describir lo que el código realmente hace. Fabricar un caso coherente en las cuatro
+fuentes a la vez —*prompts* verosímiles con su rastro humano, capturas que
+coinciden, un *blueprint* fiel a un código que el estudiante no entendió— tiene un
+coste que se aproxima al de haber hecho el trabajo. El método no vuelve imposible
+el engaño: eleva su coste hasta hacerlo comparable al del aprendizaje, que es el
+objetivo razonable de un diseño de evaluación.
+
+## Rúbrica alineada a los niveles cognitivos superiores
+
+La valoración humana se guía por una rúbrica que premia lo que discrimina
+competencia bajo el nuevo régimen: la **calidad de la descomposición** del
+problema en *prompts*; la **capacidad de iterar** ante respuestas erróneas
+(detectar el fallo, reformular); la **coherencia** entre proceso, *blueprint* y
+código; y la **comprensión** demostrada al explicar decisiones. Estos criterios
+corresponden a *analizar*, *evaluar* y *crear* [@anderson2001], y son observables
+en el proceso aunque el código lo genere la máquina. La ingeniería de *prompts*
+aporta, además, un vocabulario de patrones con el que describir y calificar esa
+descomposición [@white2023].
+
+## Cierre del canal de pull requests
+
+Una acción de integración continua detecta la apertura de cualquier PR, publica un
+comentario que explica el sistema y lo cierra. El canal de aporte deja de ser el
+*diff* —cuya revisión ya no discrimina— y pasa a ser la propuesta documentada. El
+cierre no es un veto tecnológico caprichoso: es la señal, coherente con el diseño,
+de que el objeto evaluado ha cambiado.
+
+## El evaluador como clasificador de cribado {#sec-cribado}
+
+Corregir a mano decenas de entregas de proceso volvería a ser costoso. El sistema
+incluye un evaluador que recorre las entregas y produce un informe con indicadores
+objetivos —presencia y número de *prompts*, existencia de capturas y de
+*blueprint*, extensión— y una nota orientativa. Su papel no es calificar sino
+**cribar**: es un clasificador deliberadamente orientado a la **sensibilidad**,
+que prefiere marcar de más (falsos positivos, entregas correctas enviadas a
+revisión) antes que de menos (falsos negativos, entregas problemáticas que pasan
+inadvertidas). El docente confirma; la máquina solo prioriza.
+
+La nota orientativa sobre 100 combina, de forma transparente y editable, número de
+*prompts* (hasta 30), presencia de capturas (+20) y de *blueprint* (+20) y
+extensión como aproximación al esfuerzo (hasta 30), con ajustes por alertas:
+*prompts* "demasiado limpios" —sin el rastro humano de erratas e informalidad—,
+contenido escaso o incoherencia con el ejemplo del docente. Estas señales son
+heurísticas y **evadibles** por diseño (véase @sec-amenazas): su función es
+ordenar la cola de revisión, no sustituir el juicio del docente. La categorización
+resultante (revisar / normal / destacado / rechazado) determina únicamente **dónde
+mira primero** el evaluador humano.
+
+# Despliegue e implementación {#sec-despliegue}
+
+El sistema se aplicó en un curso de **Big Data con Python** de 230 horas cuyo grupo
+no era de estudiantes universitarios convencionales, sino un conjunto
+**heterogéneo de profesionales en activo** —perfiles previos en TI, análisis de
+datos y big data— que cursaban el programa por necesidad de actualización
+profesional. Esta composición es relevante para interpretar los resultados: se
+trata de adultos con experiencia técnica y motivación instrumental, no de
+principiantes en un primer contacto con la programación.
+
+La corrección de las entregas finales, que con revisión de PRs requería varias
+horas, se realizó en el orden de media hora: el evaluador de cribado ordenó la cola
+y el docente intervino a mano solo en los casos marcados. Este resultado se reporta
+como **experiencia de despliegue**, no como medida de un estudio controlado: no se
+compararon resultados de aprendizaje frente a un grupo de control, ni se estimó la
+fiabilidad entre evaluadores ni la tasa de falsos positivos del cribado (véase
+@sec-amenazas). El código, las plantillas y el evaluador se publican para que otros
+docentes los adapten a sus propios materiales.
+
+# Amenazas a la validez {#sec-amenazas}
+
+**Validez de constructo.** El método asume que la calidad del proceso documentado
+mide competencia. Un estudiante hábil con la IA pero con comprensión superficial
+podría obtener buena nota; a la inversa, un buen programador parco documentando
+podría salir perjudicado. La rúbrica mitiga lo primero exigiendo coherencia y
+capacidad de explicar decisiones, y lo segundo tratando la documentación como
+competencia profesional legítima —comunicar el porqué es parte del oficio
+[@hunt2019]—, pero la correspondencia entre proceso y comprensión debe validarse
+empíricamente frente a medidas independientes.
+
+**Validez interna: juego adversario y falsos positivos.** La detección de *prompts*
+fabricados es heurística y **evadible**: basta pedir a la IA que introduzca erratas
+para simular espontaneidad, o reconstruir *a posteriori* un rastro verosímil. Por
+eso el cribado no emite veredictos. Simétricamente, el sesgo hacia la sensibilidad
+genera falsos positivos: estudiantes de estilo formal pueden activar la alerta sin
+haber copiado, lo que hace imprescindible que la señal conduzca a una conversación
+y no a una sanción. La coherencia entre cuatro fuentes eleva el coste del juego,
+pero no lo anula.
+
+**Validez externa.** La evidencia procede de **un único despliegue**, en **un solo
+curso**, con un **grupo de profesionales adultos** de un dominio concreto (big
+data). La generalización a estudiantes de grado sin experiencia previa, a otros
+dominios o a cursos introductorios es una conjetura, no un resultado: cabe esperar
+que en principiantes la frontera entre "usar la IA para aprender" y "usarla para
+eludir el aprendizaje" sea más difusa y el diseño de la rúbrica más delicado.
+
+**Validez de conclusión.** La reducción del tiempo de corrección (de horas a
+decenas de minutos) es una observación de eficiencia, no una medida controlada, y
+depende del tamaño del grupo y de la práctica del docente. No debe leerse como una
+estimación con incertidumbre acotada.
 
 # Ética y privacidad {#sec-etica}
 
-El método pide a los estudiantes publicar prompts y capturas en un repositorio
-público, lo que exige cautelas. Debe obtenerse **consentimiento informado** y
-ofrecerse una alternativa privada (repositorio privado o entrega por el aula
-virtual) para quien no desee exponer su trabajo. Las capturas pueden contener datos
-personales (nombre, correo, interfaz de la cuenta), por lo que se indica a los
-estudiantes que los **oculten**. La aplicación debe cumplir la normativa de
-protección de datos de la institución (RGPD en la Unión Europea, FERPA en Estados
-Unidos) y acordar la retención y retirada de los trabajos a petición del estudiante.
+El método pide a los estudiantes publicar *prompts* y capturas en un repositorio
+público, lo que exige cautelas explícitas. Debe obtenerse **consentimiento
+informado** y ofrecerse una **alternativa privada** —repositorio privado o entrega
+por el aula virtual— para quien no desee exponer su trabajo, sin penalización. Las
+capturas pueden contener datos personales (nombre, correo, interfaz de la cuenta),
+por lo que se instruye a los estudiantes para que los **oculten** antes de subir.
+La aplicación debe cumplir la normativa de protección de datos de la institución
+(RGPD en la Unión Europea, FERPA en Estados Unidos), pseudonimizar cuando sea
+posible y acordar la retención y la retirada de los trabajos a petición del
+estudiante. Estas cautelas no son accesorias: un método que gana transparencia
+sobre el proceso incrementa por ello mismo la exposición del estudiante, y ese
+equilibrio debe gestionarse de forma expresa.
 
-# Limitaciones y trabajo futuro {#sec-limitaciones}
+# Trabajo futuro {#sec-futuro}
 
-La detección de prompts fabricados es **heurística y evitable**: un estudiante puede
-pedir a la IA que introduzca erratas para simular espontaneidad. Por ello las
-alertas deben tratarse como señales para la revisión en persona, no como veredictos.
-La evidencia de eficacia procede de un **único despliegue** y no sustituye a un
-estudio con datos de aprendizaje, tasa de falsos positivos y validez de la
-evaluación. El trabajo futuro pasa por: recoger de forma sistemática las
-calificaciones y una encuesta a los estudiantes; estimar la concordancia entre
-evaluadores; y contrastar la evaluación por prompts con medidas independientes de
-comprensión.
+La agenda empírica que este trabajo deja abierta es concreta: (i) **validar la
+rúbrica** correlacionando la evaluación por *prompts* con medidas independientes de
+comprensión (p. ej. una defensa oral o un examen); (ii) estimar la **fiabilidad
+entre evaluadores** de la rúbrica; (iii) medir la **tasa de falsos positivos** del
+cribado y calibrar su umbral de sensibilidad; (iv) replicar en **varios cursos e
+instituciones**, incluyendo grados con principiantes, para acotar la validez
+externa; y (v) explorar la **transferencia** del principio —evaluar el proceso de
+pensamiento en lugar del entregable que la IA puede generar— a dominios no
+relacionados con la programación, donde cambia el formato de la evidencia pero no
+la lógica del argumento.
 
 # Conclusión {#sec-conclusion}
 
-Cuando el producto deja de discriminar el aprendizaje, evaluar el proceso recupera
-la validez de la evaluación. Documentar y valorar los prompts —las preguntas que el
-estudiante sabe hacer— convierte el uso de la IA de amenaza a objeto de evaluación,
-y hace la corrección escalable. La propuesta se ofrece como método y conjunto de
-herramientas reproducibles para la comunidad educativa, a la espera de la evidencia
-empírica que un estudio controlado deberá aportar.
+Cuando un generador competente puede producir el artefacto, evaluar el producto
+deja de medir el aprendizaje: es un problema de validez antes que de honestidad. La
+respuesta más robusta no es prohibir ni vigilar la IA, sino rediseñar el objeto
+evaluado y desplazar la evidencia al proceso —los *prompts*, las decisiones, la
+capacidad de explicar—, restaurando la alineación entre lo que se evalúa y lo que
+hoy se aprende. La evaluación por *prompts* operacionaliza ese desplazamiento con
+un modelo de evidencia basado en la coherencia de varias fuentes, una rúbrica
+orientada a los niveles cognitivos superiores y un cribado automático que prioriza
+la revisión humana sin sustituirla. Se ofrece como marco, método y herramientas
+reproducibles, a la espera de la evidencia empírica que un estudio controlado
+deberá aportar.
 
 # Disponibilidad {.unnumbered}
 
-El código y los materiales están disponibles bajo licencia MIT en
+El código, las plantillas y el evaluador están disponibles bajo licencia MIT en
 <https://github.com/TodoEconometria/evaluacion-prompts-ia>.
+
+# Cómo citar este trabajo {.unnumbered}
+
+Gutierrez Miranda, J. M. (2026). *Evaluación por prompts: desplazar la evaluación
+del producto al proceso en la enseñanza de la programación en la era de la IA
+generativa*. Preprint. TodoEconometria.
 
 # Referencias {.unnumbered}
 

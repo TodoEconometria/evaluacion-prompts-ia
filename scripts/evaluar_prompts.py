@@ -13,7 +13,16 @@ Configuracion:
 
 Parte del sistema de Evaluacion por PROMPTS
 https://github.com/TodoEconometria/evaluacion-prompts-ia
+
+Autor:  Juan Marcelo Gutierrez Miranda | TodoEconometria
+Cita:   Gutierrez Miranda, J. M. (2026). Evaluacion por prompts: desplazar la
+        evaluacion del producto al proceso en la ensenanza de la programacion
+        en la era de la IA generativa. Preprint. TodoEconometria.
+Licencia: MIT
 """
+__author__ = "Juan Marcelo Gutierrez Miranda"
+__license__ = "MIT"
+__project__ = "https://github.com/TodoEconometria/evaluacion-prompts-ia"
 
 import os
 import re

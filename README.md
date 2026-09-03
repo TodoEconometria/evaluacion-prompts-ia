@@ -197,8 +197,10 @@ Edita `scripts/config.py` con los usernames de GitHub de tus alumnos.
   git) y pon ahi la lista real de alumnos y los criterios. `config.py` **nunca** se versiona.
 
 ### `/docs/`
-- `metodologia.md` - Explicacion detallada del sistema
-- `configuracion-github.md` - Como configurar tu repositorio
+- `guia-despliegue.md` - **Empieza aqui**: implanta el sistema en tu curso con un
+  ejemplo generico end-to-end, adaptable a tus materiales
+- `metodologia.md` - Explicacion detallada del sistema (el paper)
+- `configuracion-github.md` - Detalle mecanico de GitHub (permisos, Actions)
 - `anti-trampa.md` - Tecnicas de deteccion implementadas
 - `faq.md` - Preguntas frecuentes
 
@@ -210,7 +212,9 @@ Este sistema se usa en el curso **Big Data con Python** (230 horas):
 
 - **Repositorio:** [ejercicios-bigdata](https://github.com/TodoEconometria/ejercicios-bigdata)
 - **Web:** [todoeconometria.github.io/ejercicios-bigdata](https://todoeconometria.github.io/ejercicios-bigdata/)
-- **Alumnos:** 18 estudiantes universitarios
+- **Participantes:** 18 profesionales en activo con perfiles heterogeneos
+  (experiencia previa en TI, analisis de datos y big data) que cursaban el
+  programa por necesidad de actualizacion profesional
 - **Resultado:** Evaluacion de 18 trabajos en 30 minutos (vs 6+ horas con PRs)
 
 ---
@@ -242,16 +246,33 @@ Este proyecto es open source. Puedes:
 
 ## Licencia
 
-MIT License - Usa, modifica y comparte libremente.
+MIT License - Usa, modifica y comparte libremente, **conservando el aviso de
+copyright y la atribucion al autor** (no elimines las cabeceras de autoria de los
+scripts).
+
+---
+
+## Como citar
+
+Si usas el metodo o las herramientas, cita la autoria. GitHub muestra el boton
+**"Cite this repository"** (ver [`CITATION.cff`](CITATION.cff)).
+
+**Cita academica (preprint):**
+
+> Gutierrez Miranda, J. M. (2026). *Evaluacion por prompts: desplazar la evaluacion
+> del producto al proceso en la ensenanza de la programacion en la era de la IA
+> generativa*. Preprint. TodoEconometria.
+> https://github.com/TodoEconometria/evaluacion-prompts-ia
 
 ---
 
 ## Autor
 
-**Prof. Juan Marcelo Gutierrez Miranda**
+**Prof. Juan Marcelo Gutierrez Miranda | TodoEconometria**
 - GitHub: [@TodoEconometria](https://github.com/TodoEconometria)
 - Web: [todoeconometria.com](https://www.todoeconometria.com)
 - LinkedIn: [juangutierrezconsultor](https://www.linkedin.com/in/juangutierrezconsultor/)
+- ORCID: [0000-0002-4452-7934](https://orcid.org/0000-0002-4452-7934)
 
 ---
 

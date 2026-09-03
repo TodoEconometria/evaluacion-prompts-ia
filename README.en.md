@@ -193,10 +193,12 @@ list of students and the criteria there. `config.py` is **never** committed.
 - `config.example.py` - Configuration template (copy to `config.py`)
 
 ### `/docs/`
-- `methodology.md` - Detailed explanation of the system
+- `deployment-guide.md` - **Start here**: adopt the system in your course with a
+  generic end-to-end example, adaptable to your materials
+- `methodology.md` - Detailed explanation of the system (the paper)
 - `anti-cheating.md` - Detection techniques
 - `faq.en.md` - Frequently asked questions
-- `configuracion-github.md` - How to configure your repository (ES)
+- `configuracion-github.md` - Mechanical GitHub detail: permissions, Actions (ES)
 
 ---
 
@@ -205,7 +207,9 @@ list of students and the criteria there. `config.py` is **never** committed.
 This system is used in the **Big Data with Python** course (230 hours):
 
 - **Repository:** [ejercicios-bigdata](https://github.com/TodoEconometria/ejercicios-bigdata)
-- **Students:** 18 university students
+- **Participants:** 18 working professionals with heterogeneous backgrounds
+  (prior experience in IT, data analysis and big data) taking the program to
+  reskill
 - **Result:** 18 submissions assessed in 30 minutes (vs 6+ hours with PRs)
 
 ---
@@ -235,16 +239,32 @@ in [`docs/methodology.md`](docs/methodology.md#privacy-and-consent).
 
 ## License
 
-MIT License - Use, modify and share freely.
+MIT License - Use, modify and share freely, **keeping the copyright notice and the
+attribution to the author** (do not remove the authorship headers from the scripts).
+
+---
+
+## How to cite
+
+If you use the method or the tools, cite the authorship. GitHub shows the **"Cite
+this repository"** button (see [`CITATION.cff`](CITATION.cff)).
+
+**Academic citation (preprint):**
+
+> Gutierrez Miranda, J. M. (2026). *Assessment by prompts: shifting assessment from
+> product to process in programming education in the age of generative AI*.
+> Preprint. TodoEconometria.
+> https://github.com/TodoEconometria/evaluacion-prompts-ia
 
 ---
 
 ## Author
 
-**Prof. Juan Marcelo Gutierrez Miranda**
+**Prof. Juan Marcelo Gutierrez Miranda | TodoEconometria**
 - GitHub: [@TodoEconometria](https://github.com/TodoEconometria)
 - Web: [todoeconometria.com](https://www.todoeconometria.com)
 - LinkedIn: [juangutierrezconsultor](https://www.linkedin.com/in/juangutierrezconsultor/)
+- ORCID: [0000-0002-4452-7934](https://orcid.org/0000-0002-4452-7934)
 
 ---
 

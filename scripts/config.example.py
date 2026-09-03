@@ -5,6 +5,10 @@ Configuracion del Sistema de Evaluacion por PROMPTS
 Copia este archivo a config.py y edita los valores.
 
 IMPORTANTE: config.py NO debe subirse a GitHub (esta en .gitignore)
+
+Autor: Juan Marcelo Gutierrez Miranda | TodoEconometria
+Parte de "Evaluacion por PROMPTS" (MIT):
+https://github.com/TodoEconometria/evaluacion-prompts-ia
 """
 
 # Repositorio original del curso (sin https://github.com/)

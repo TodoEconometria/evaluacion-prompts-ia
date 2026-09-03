@@ -3,6 +3,9 @@
 #
 # Parte del sistema de Evaluacion por PROMPTS
 # https://github.com/TodoEconometria/evaluacion-prompts-ia
+#
+# Autor: Juan Marcelo Gutierrez Miranda | TodoEconometria · Licencia MIT
+# Cita: Gutierrez Miranda, J. M. (2026)
 
 name: Cerrar PRs Automaticamente
 

@@ -1,9 +1,13 @@
+<img src="assets/logofinal.png" align="right" width="120" alt="TodoEconometria"/>
+
 # Evaluacion por PROMPTS: Una alternativa a los Pull Requests en educacion
 
 > **Evalua el proceso de aprendizaje, no el codigo generado por IA**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Made for Education](https://img.shields.io/badge/Made%20for-Education-blue)](https://github.com/TodoEconometria)
+
+**Idioma:** Español · [English](README.en.md)
 
 ---
 
@@ -116,6 +120,36 @@ El sistema detecta automaticamente:
 
 ---
 
+## Criterios de Puntuacion
+
+El script `evaluar_prompts.py` sugiere una nota sobre 100 (transparente y reproducible;
+el profesor tiene la ultima palabra). Los pesos son:
+
+| Componente | Como se mide | Puntos |
+|------------|--------------|--------|
+| Numero de prompts | `10 x nº de prompts`, con tope | 0–30 |
+| Capturas de pantalla | Menciona capturas / `.png` / `.jpg` | +20 |
+| Blueprint final | Menciona blueprint / resumen tecnico | +20 |
+| Esfuerzo (palabras) | `palabras / 50`, con tope | 0–30 |
+
+**Ajustes por alerta** (sobre la suma anterior):
+
+- `SOSPECHOSO` (prompts demasiado formales: mas del doble de palabras formales que
+  informales con ≥3 prompts) → **−20**
+- `REVISAR` (contenido corto: menos de 300 palabras) → **−10**
+- `DESTACADO` (>1000 palabras y ≥5 prompts) → **+10**
+
+La nota final se recorta al rango `[0, 100]`. La **categoria** se decide asi: cualquier
+alerta `SOSPECHOSO` manda a **REVISAR**; nota 0 → **RECHAZADO**; `DESTACADO` o nota ≥90 →
+**DESTACADO**; nota ≥60 → **NORMAL**; el resto → **REVISAR**.
+
+> Estos umbrales son un **punto de partida** editable en `config.py`. La nota es una
+> señal de triaje —no una calificacion final— para que el profesor concentre su tiempo
+> en el ~10% de casos que de verdad requieren revision humana. Ver
+> [`docs/anti-trampa.md`](docs/anti-trampa.md) para el detalle de la deteccion.
+
+---
+
 ## Instalacion
 
 ### 1. Clonar este repositorio
@@ -159,7 +193,8 @@ Edita `scripts/config.py` con los usernames de GitHub de tus alumnos.
 
 ### `/scripts/`
 - `evaluar_prompts.py` - Script de evaluacion automatica
-- `config.py` - Configuracion (lista de alumnos, criterios)
+- `config.example.py` - Plantilla de configuracion. Copiala a `config.py` (ignorado por
+  git) y pon ahi la lista real de alumnos y los criterios. `config.py` **nunca** se versiona.
 
 ### `/docs/`
 - `metodologia.md` - Explicacion detallada del sistema

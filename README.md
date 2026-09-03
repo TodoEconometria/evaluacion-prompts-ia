@@ -231,6 +231,18 @@ Este sistema reconoce que:
 3. **La autenticidad es verificable** - Los prompts "reales" tienen errores humanos
 4. **La eficiencia beneficia a todos** - Menos tiempo revisando = mas tiempo ensenando
 
+### El limite: a quien conoces y a quien no
+
+Dentro de un curso o un equipo, el docente o el jefe de desarrollo **conoce a su
+gente**: reconoce la voz de cada uno en sus prompts, asi que el cribado le ahorra
+tiempo sin quitarle el criterio. Pero cuando el aporte llega de **alguien
+desconocido** —el caso del open source, para el que nacieron los pull requests— hay
+que leer entre lineas como se construyeron los prompts, **probar** el aporte y
+decidir si se acepta o no. Esa decision conserva una **subjetividad irreducible**
+que no se puede automatizar, prever ni erradicar: el metodo automatiza el cribado,
+no la responsabilidad de decidir. Detalle en
+[`docs/metodologia.md`](docs/metodologia.md).
+
 ---
 
 ## Contribuir

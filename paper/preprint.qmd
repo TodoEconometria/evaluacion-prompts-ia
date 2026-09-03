@@ -304,6 +304,31 @@ decenas de minutos) es una observación de eficiencia, no una medida controlada,
 depende del tamaño del grupo y de la práctica del docente. No debe leerse como una
 estimación con incertidumbre acotada.
 
+# Alcance: cohorte conocida frente a aporte externo {#sec-alcance}
+
+El método reduce el tiempo de revisión y aumenta la productividad del docente, pero
+descansa sobre un supuesto que conviene explicitar. Dentro de un curso o de un
+equipo de desarrollo, quien evalúa **conoce a su gente**: reconoce la voz de un
+estudiante en sus *prompts* igual que reconocería su manera de escribir código, y
+la coherencia entre el proceso y la persona le resulta verificable casi de un
+vistazo. En ese régimen, la automatización descrita —el cribado que ordena la cola
+de revisión— libera tiempo precisamente porque el juicio de fondo se apoya en un
+conocimiento previo del evaluado.
+
+La naturaleza del problema cambia cuando la propuesta llega de **alguien a quien no
+se conoce**. Es el caso del aporte externo a un proyecto público —de código
+abierto—, que es, no por casualidad, el escenario para el que se concibieron los
+*pull requests*. Allí no basta con leer los *prompts*: hay que leer *entre líneas*
+cómo se construyó el razonamiento, **probar** el aporte y decidir si se acepta o se
+rechaza aplicando la experiencia y el conocimiento del oficio. Esa decisión conserva
+una **subjetividad irreducible**: no puede automatizarse, ni preverse, ni
+erradicarse, y es exactamente la parte que, como humanos, seguimos teniendo que
+gestionar. Conviene, por tanto, delimitar el alcance de la propuesta: la evaluación
+por *prompts* desplaza y reduce el trabajo de revisión dentro de una relación de
+confianza ya establecida —el aula, el equipo—, pero **no elimina el juicio humano**
+allí donde esa confianza no existe de antemano. Reconocer este límite no debilita el
+método; lo sitúa: automatiza el cribado, no la responsabilidad de decidir.
+
 # Ética y privacidad {#sec-etica}
 
 El método pide a los estudiantes publicar *prompts* y capturas en un repositorio
@@ -342,9 +367,12 @@ capacidad de explicar—, restaurando la alineación entre lo que se evalúa y l
 hoy se aprende. La evaluación por *prompts* operacionaliza ese desplazamiento con
 un modelo de evidencia basado en la coherencia de varias fuentes, una rúbrica
 orientada a los niveles cognitivos superiores y un cribado automático que prioriza
-la revisión humana sin sustituirla. Se ofrece como marco, método y herramientas
-reproducibles, a la espera de la evidencia empírica que un estudio controlado
-deberá aportar.
+la revisión humana sin sustituirla. Su alcance tiene además un límite honesto
+(@sec-alcance): automatiza el cribado dentro de una relación de confianza conocida
+—el aula, el equipo—, pero no el juicio, irreduciblemente subjetivo, que exige
+aceptar o rechazar el aporte de un desconocido. Se ofrece como marco, método y
+herramientas reproducibles, a la espera de la evidencia empírica que un estudio
+controlado deberá aportar.
 
 # Disponibilidad {.unnumbered}
 

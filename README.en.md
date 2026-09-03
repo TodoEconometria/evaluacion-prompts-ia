@@ -226,6 +226,18 @@ This system recognizes that:
 3. **Authenticity is verifiable** - "Real" prompts carry human errors
 4. **Efficiency benefits everyone** - Less time reviewing = more time teaching
 
+### The limit: the people you know and the people you don't
+
+Within a course or a team, the instructor or the development lead **knows their
+people**: they recognize each one's voice in their prompts, so the triage saves time
+without taking away their judgment. But when the contribution comes from **someone
+they do not know** —the open-source case, the one pull requests were created for— you
+must read between the lines how the prompts were built, **test** the contribution,
+and decide whether to accept it. That decision retains an **irreducible
+subjectivity** that cannot be automated, foreseen or eradicated: the method automates
+the triage, not the responsibility to decide. Detail in
+[`docs/methodology.md`](docs/methodology.md).
+
 ---
 
 ## Privacy

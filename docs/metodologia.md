@@ -171,6 +171,29 @@ fork publico. Antes de aplicarlo:
 - **Retencion**: acuerda cuanto tiempo permaneceran publicos los trabajos y como
   retirarlos a peticion del alumno.
 
+## Alcance: a quien conoces y a quien no
+
+El sistema reduce el tiempo de revision y aumenta la productividad, pero descansa
+sobre un supuesto que conviene explicitar. Dentro de un curso o de un equipo de
+desarrollo, quien evalua **conoce a su gente**: reconoce la voz de un alumno o
+colaborador en sus prompts igual que reconoceria su forma de escribir codigo, y la
+coherencia entre el proceso y la persona le resulta verificable casi de un vistazo.
+En ese regimen, el cribado automatico libera tiempo precisamente porque el juicio de
+fondo se apoya en un conocimiento previo.
+
+La cosa cambia cuando la propuesta llega de **alguien a quien no se conoce** —el
+aporte externo a un proyecto publico (open source), que es, no por casualidad, el
+escenario para el que nacieron los pull requests—. Ahi no basta con leer los
+prompts: hay que leer **entre lineas** como se construyo el razonamiento, **probar**
+el aporte y decidir si se acepta o se rechaza aplicando la experiencia y el
+conocimiento del oficio. Esa decision conserva una **subjetividad irreducible**: no
+puede automatizarse, ni preverse, ni erradicarse, y es exactamente la parte que,
+como humanos, seguimos teniendo que gestionar. La evaluacion por prompts desplaza y
+reduce el trabajo de revision dentro de una relacion de confianza ya establecida
+—el aula, el equipo—, pero **no elimina el juicio humano** alli donde esa confianza
+no existe de antemano. Reconocer este limite no debilita el metodo: automatiza el
+cribado, no la responsabilidad de decidir.
+
 ## Limitaciones
 
 - El detector de "prompts limpiados" es heuristico y **evitable** (un alumno puede

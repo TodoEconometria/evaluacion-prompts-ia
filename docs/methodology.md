@@ -151,6 +151,29 @@ Before applying it:
 - **Retention**: agree on how long the work stays public and how to withdraw it on the
   student's request.
 
+## Scope: the people you know and the people you don't
+
+The system cuts review time and raises productivity, but it rests on an assumption
+worth making explicit. Within a course or a development team, whoever assesses
+**knows their people**: they recognize a student's or collaborator's voice in their
+prompts just as they would recognize how that person writes code, and the coherence
+between the process and the person is verifiable almost at a glance. In that regime,
+the automated triage frees time precisely because the underlying judgment rests on
+prior knowledge.
+
+The nature of the problem changes when the proposal comes from **someone they do not
+know** —an external contribution to a public (open-source) project, which is, not by
+accident, the scenario pull requests were created for. There, reading the prompts is
+not enough: one must read **between the lines** how the reasoning was built,
+**test** the contribution, and decide whether to accept or reject it by applying the
+experience and knowledge of the craft. That decision retains an **irreducible
+subjectivity**: it cannot be automated, foreseen, or eradicated, and it is exactly
+the part that we, as humans, still have to manage. Assessment by prompts shifts and
+reduces the work of review within an already-established relationship of trust —the
+classroom, the team—, but it **does not remove human judgment** where that trust
+does not already exist. Acknowledging this limit does not weaken the method: it
+automates the triage, not the responsibility to decide.
+
 ## Limitations
 
 - The "cleaned prompts" detector is heuristic and **evadable** (a student can ask the AI
